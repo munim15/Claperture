@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+
+    <item
+        android:id="@+id/share"
+        android:showAsAction="ifRoom"
+        android:title="@string/share"
+        android:icon="@drawable/share"/>
+    
+    <item
+        android:id="@+id/save"
+        android:showAsAction="ifRoom"
+        android:title="@string/save"
+        android:icon="@drawable/save"/>
+
+</menu>
