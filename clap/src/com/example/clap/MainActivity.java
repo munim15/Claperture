@@ -39,7 +39,6 @@ public class MainActivity extends Activity implements AudioProc.OnAudioEventList
 	private AudioProc mAudioProc;
 	private PitchProcessor mPitchProcessor;
 	private Button mListenButton;
-	//private static final String TAG = "PitchTrackerActivity";
 	
 	private TextView countdown;
     private SurfaceHolder holder;
@@ -47,15 +46,6 @@ public class MainActivity extends Activity implements AudioProc.OnAudioEventList
     
     private android.hardware.Camera.PictureCallback pictureBitmapCallback;
     private android.hardware.Camera.PictureCallback pictureJPEGCallback;
-    private android.hardware.Camera.ShutterCallback shutterCallback =
-    		new android.hardware.Camera.ShutterCallback() {
-
-        public void onShutter()
-        {
-            ((AudioManager)getSystemService("audio")).playSoundEffect(4);
-        }
-
-    };
     private android.view.SurfaceHolder.Callback surfaceCallback;
     private SurfaceView sv;
     private Uri u;
@@ -76,33 +66,6 @@ public class MainActivity extends Activity implements AudioProc.OnAudioEventList
 		mAudioProc.setOnAudioEventListener(this);
 		mListenButton = (Button)findViewById(R.id.listen);
 		
-		
-		/*Button buttonTakePicture = (Button)findViewById(R.id.button1);
-        buttonTakePicture.setOnClickListener(new Button.OnClickListener(){
-
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				//cam.takePicture(myShutterCallback, 
-					//	myPictureCallback_RAW, myPictureCallback_JPG);
-				(new CountDownTimer(5000L, 500L) {
-
-
-		            public void onFinish()
-		            {
-		            	cam.takePicture(myShutterCallback, 
-								myPictureCallback_RAW, myPictureCallback_JPG);
-		            	countdown.setText("");
-		            }
-
-		            public void onTick(long l)
-		            {
-		                countdown.setText((new StringBuilder()).append(l / 1000L).toString());
-		            }
-
-		        }).start();
-			}});*/
-		
 		mListenButton.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -114,10 +77,8 @@ public class MainActivity extends Activity implements AudioProc.OnAudioEventList
 				if (mAudioProc.isRecording()) {
 					mListenButton.setBackground(getResources().getDrawable(R.drawable.apb));
 					mAudioProc.stop();
-					//mListenButton.setText("Listen");
 				} else {
 					mAudioProc.listen();
-					//mListenButton.setText("Stop listening");
 					mListenButton.setBackground(getResources().getDrawable(R.drawable.apc));
 				}
 			}
@@ -184,8 +145,7 @@ public class MainActivity extends Activity implements AudioProc.OnAudioEventList
 
 	@Override
 	public void processAudioProcEvent(AudioEvent ae) {
-		// detect pitch
-		//mPitchProcessor.process(ae);
+
 		det.process(ae);
 	}
 
@@ -218,7 +178,6 @@ public class MainActivity extends Activity implements AudioProc.OnAudioEventList
 				
 				@Override
 				public void run() {
-					//mPitchBox.setText(String.valueOf(t));
 					takePicture();
 					System.out.println("Two claps");
 				}
@@ -279,11 +238,7 @@ public class MainActivity extends Activity implements AudioProc.OnAudioEventList
 	PictureCallback myPictureCallback_JPG = new PictureCallback(){
 
 		@Override
-		public void onPictureTaken(byte[] arg0, Camera arg1) {
-			// TODO Auto-generated method stub
-			/*Bitmap bitmapPicture 
-				= BitmapFactory.decodeByteArray(arg0, 0, arg0.length);	*/
-			
+		public void onPictureTaken(byte[] arg0, Camera arg1) {			
 			Uri uriTarget = getContentResolver().insert(Media.EXTERNAL_CONTENT_URI, new ContentValues());
 
 			OutputStream imageFileOS;
@@ -294,10 +249,6 @@ public class MainActivity extends Activity implements AudioProc.OnAudioEventList
 				imageFileOS.close();
 				
 				mAudioProc.stop();
-				//mListenButton.setText("Listen");
-				/*Toast.makeText(MainActivity.this, 
-						"Image saved: " + uriTarget.toString(), 
-						Toast.LENGTH_LONG).show();*/
                 Intent intent = new Intent(MainActivity.this, ImgShow.class);
                 intent.putExtra("image", arg0);
                 intent.putExtra("ur", uriTarget.toString());
@@ -312,8 +263,7 @@ public class MainActivity extends Activity implements AudioProc.OnAudioEventList
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			//mListenButton.setVisibility(View.GONE);
-			//cam.startPreview();
+
 		}};
 
     public void takePicture() {
